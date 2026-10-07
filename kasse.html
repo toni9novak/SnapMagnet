@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kasse & Bestellabschluss - SnapMagnet</title>
+  <meta name="description" content="Schließen Sie Ihre Bestellung für personalisierte Fotomagnete ab.">
+  <script src="https://cdn.tailwindcss.com"></script>
+<style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, Cabinet Grotesk, Crimson Pro sans-serif;
+        }
+
+        body {
+            background-color: #f4f8fb;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigacija */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: #1a1a1a;
+        }
+
+        .logo span {
+            color: #4a72ff;
+        }
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #4a72ff;
+        }
+
+        /* Glavni kontejner */
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 90%;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 30px;
+            color: #26272B;
+        }
+
+        /* Kontrole za prilagodbu */
+        .customizer {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Gumb za prijenos slika */
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .btn-upload {
+            border: none;
+            color: #26272B;
+            background-color: #E2EBFF;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+        }
+
+        .btn-upload:hover:not(:disabled) {
+            background-color: #e0e7ff;
+        }
+
+        .btn-upload:disabled {
+            background-color: #f1f5f9;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-btn-wrapper input[type=file]:disabled {
+            cursor: not-allowed;
+        }
+
+        .image-limit-info {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        /* Kontejner za Pregled (Preview) Slika */
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .preview-item {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .preview-item:hover {
+            transform: scale(1.03);
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Gumb za brisanje pojedinačne slike */
+        .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 2;
+        }
+
+        .remove-btn:hover {
+            background: rgba(220, 38, 38, 0.9);
+        }
+
+        /* Red s količinom i unosom teksta */
+        .controls-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Količina selector */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #D9E5FF;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .qty-btn {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            color: #8DA7FF;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .qty-input {
+            width: 45px;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            outline: none;
+        }
+
+        /* Custom Tekst input */
+        .text-input-wrapper {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #D9E5FF;
+            background-color: #fff;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .text-input:focus {
+            border-color: #D9E5FF;
+            background-color: #fff;
+        }
+
+        /* Prikaz cijene */
+        .price-section {
+            margin-top: 20px;
+            padding-top: 25px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .price-label {
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #8DA7FF;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .price-amount {
+            font-size: 80px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .price-note {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* --- CAROUSEL / LIGHTBOX MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-content {
+            max-width: 80%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            font-size: 28px;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .prev-btn { left: 30px; }
+        .next-btn { right: 30px; }
+
+        .modal-counter {
+            color: #ffffff;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #f4f8fb;
+      color: #26272B;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header Styling matching index.html */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 8%;
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    .logo-text {
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+      color: #1a1a1a;
+      text-decoration: none;
+    }
+
+    .logo-text span {
+      color: #4a72ff;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #555;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #4a72ff;
+    }
+
+    /* Dashed add button like in reference design */
+    .btn-add-more {
+      border: 2px dashed #e08c48;
+      color: #d97706;
+      background: #fffbeb;
+      transition: all 0.2s ease;
+    }
+
+    .btn-add-more:hover {
+      background: #fef3c7;
+      border-color: #d97706;
+      transform: translateY(-1px);
+    }
+
+    /* Form Input Focus States */
+    .checkout-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #d9e5ff;
+      background-color: #ffffff;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .checkout-input:focus {
+      border-color: #4a72ff;
+      box-shadow: 0 0 0 3px rgba(74, 114, 255, 0.15);
+    }
+
+    .checkout-card {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .item-thumbnail {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="logo-link" href="index.html" aria-label="SnapMagnet Startseite">
+      <img src="assets/SnapMagnet_Logo.png" alt="SnapMagnet" style="width:80px;">
+    </a>
+    <nav class="top-nav">
+      <a href="#kontakt">Kontakt</a>
+      <a class="cart" href="#" aria-label="Warenkorb">
+        <span class="cart-icon">♧</span><span class="cart-count">0</span>
+      </a>
+    </nav>
+  </header>
+
+  <main class="flex-1 max-w-6xl w-11/12 mx-auto my-8">
+    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-8 tracking-tight">Bestellung abschließen</h1>
+
+    <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <section class="lg:col-span-7 flex flex-col gap-6">
+        <div class="checkout-card p-6 sm:p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-9 h-9 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg">
+              🚚
+            </div>
+            <h2 class="text-xl font-bold text-gray-800">Lieferadresse</h2>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label for="fullname" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Vor- und Nachname *</label>
+              <input type="text" id="fullname" required placeholder="Jane Smith" class="checkout-input" value="Jane Smith">
+            </div>
+
+            <div>
+              <label for="street" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Straße und Hausnummer *</label>
+              <input type="text" id="street" required placeholder="Musterstraße 12" class="checkout-input" value="Musterstraße 1">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="zip" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">PLZ *</label>
+                <input type="text" id="zip" required placeholder="20095" class="checkout-input" value="20095">
+              </div>
+              <div>
+                <label for="city" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Stadt *</label>
+                <input type="text" id="city" required placeholder="Hamburg" class="checkout-input" value="Hamburg">
+              </div>
+            </div>
+
+            <div>
+              <label for="country" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Land *</label>
+              <select id="country" onchange="recalculateTotals()" class="checkout-input font-medium text-gray-700 cursor-pointer">
+                <option value="DE" selected>Deutschland</option>
+                <option value="EU">Österreich (EU)</option>
+                <option value="EU">Niederlande (EU)</option>
+                <option value="EU">Frankreich (EU)</option>
+                <option value="EU">Italien (EU)</option>
+                <option value="EU">Spanien (EU)</option>
+                <option value="EU">Sonstiges EU-Land</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="email" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">E-Mail-Adresse *</label>
+              <input type="email" id="email" required placeholder="ihre.email@beispiel.de" class="checkout-input" value="your@email.com">
+            </div>
+
+            <div>
+              <label for="phone" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5">Telefonnummer (optional)</label>
+              <input type="tel" id="phone" placeholder="+49 170 1234567" class="checkout-input" value="+49 170 1234567">
+            </div>
+          </div>
+        </div>
+
+        <!-- Zahlungsart Hint -->
+        <div class="checkout-card p-6 bg-blue-50/50 border-blue-100 flex items-center gap-4">
+          <div class="text-2xl">💳</div>
+          <div>
+            <h3 class="text-sm font-semibold text-gray-800">Sichere Bezahlung via Stripe</h3>
+            <p class="text-xs text-gray-500 mt-0.5">Kreditkarte, Klarna, PayPal oder Apple Pay im nächsten Schritt.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="lg:col-span-5 flex flex-col gap-4">
+        <div class="checkout-card p-6 sm:p-7 sticky top-6">
+          <div class="flex justify-between items-center mb-5 pb-3 border-b border-gray-100">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">📋</span>
+              <h2 class="text-lg font-bold text-gray-800">Ihre Bestellung</h2>
+            </div>
+            <span class="text-xs text-gray-400 font-mono" id="orderRefDisplay">SB-2026-9025</span>
+          </div>
+
+          <!-- Add More Button -->
+          <a href="Napravi.html" class="btn-add-more w-full py-3 px-4 rounded-xl flex items-center justify-center font-semibold text-sm mb-6 shadow-sm">
+            + Weitere Magnete hinzufügen
+          </a>
+
+          <!-- Cart Item List -->
+          <div id="cartItemList" class="space-y-4 max-h-80 overflow-y-auto pr-1 mb-6 border-b border-gray-100 pb-6">
+            <!-- Dynamic Cart Items injected via JS -->
+          </div>
+
+          <!-- Cost Calculations -->
+          <div class="space-y-3 text-sm border-b border-gray-100 pb-5">
+            <div class="flex justify-between text-gray-600">
+              <span>Zwischensumme (<span id="totalMagnetCount">0</span> Stk.)</span>
+              <span id="subtotalPrice" class="font-medium text-gray-800">0,00 €</span>
+            </div>
+            
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-gray-600">Versandkosten</span>
+                <span id="shippingNotice" class="block text-[11px] text-gray-400">Standardversand</span>
+              </div>
+              <span id="shippingPrice" class="font-medium text-gray-800">0,00 €</span>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="flex justify-between items-baseline py-4 mb-4">
+            <span class="text-lg font-bold text-gray-900">Gesamtsumme</span>
+            <span id="grandTotalPrice" class="text-3xl font-extrabold text-gray-900">0,00 €</span>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="payButton" class="w-full bg-slate-900 hover:bg-indigo-900 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 text-base">
+            <span>💳</span>
+            <span id="payBtnText">Jetzt kostenpflichtig bestellen</span>
+          </button>
+
+          <!-- Legal Notes (German §19 UStG and BGB) -->
+          <div class="mt-6 pt-4 border-t border-gray-100 text-[11px] text-gray-400 leading-relaxed space-y-1">
+            <p>Gemäß § 19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmerstatus).</p>
+            <p>Personalisierte Produkte — kein Widerrufsrecht (§ 312g Abs. 2 Nr. 1 BGB).</p>
+            <p class="pt-1 text-[10px]">Bestell-Nr.: <span id="orderRefFooter">SB-2026-9025</span></p>
+          </div>
+        </div>
+      </section>
+
+    </form>
+  </main>
+
+  <footer id="kontakt" class="mt-auto py-8 bg-white border-t border-gray-100 text-center text-xs text-gray-400">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="font-bold text-gray-700 text-sm">Snap<span class="text-blue-600">Magnet</span></div>
+      <div class="flex gap-6">
+        <a href="index.html" class="hover:text-blue-600 transition">Magnete erstellen</a>
+        <a href="#kontakt" class="hover:text-blue-600 transition">Versandkosten</a>
+        <a href="#kontakt" class="hover:text-blue-600 transition">Kontakt</a>
+      </div>
+      <div>SnapMagnet © All Rights Reserved 2026</div>
+    </div>
+  </footer>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-2xl text-sm font-medium opacity-0 transition-opacity pointer-events-none z-50">
+    <span id="toastMsg">Mitteilung</span>
+  </div>
+
+  <script>
+    // Configuration constants matching user rules
+    const PRICE_PER_UNIT = 3.00; // 3 € pro Magnet
+    const STORAGE_KEY = 'snapmagnet_cart';
+
+    // Global state
+    let cart = [];
+
+    // Fallback sample image for preview
+    const DEFAULT_PREVIEW = 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=150&q=80';
+
+    // Generate random Order Reference Number
+    function initOrderRef() {
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const refCode = `SB-2026-${randomNum}`;
+      document.getElementById('orderRefDisplay').textContent = refCode;
+      document.getElementById('orderRefFooter').textContent = refCode;
+    }
+
+    // Load Cart from localStorage (or populate default demo data)
+    function loadCart() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          cart = JSON.parse(stored);
+        } catch (e) {
+          console.error("Cart parsing error:", e);
+          cart = [];
+        }
+      }
+
+      // Demo fallback if cart is completely empty when loading kasse.html directly
+      if (!cart || cart.length === 0) {
+        cart = [
+          {
+            id: Date.now() + 1,
+            size: '63 × 63 mm',
+            quantity: 3,
+            text: 'Urlaub 2026',
+            image: DEFAULT_PREVIEW,
+            price: 3.00
+          }
+        ];
+        saveCart();
+      }
+
+      renderCart();
+    }
+
+    function saveCart() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+    }
+
+    // Render cart items to the summary list
+    function renderCart() {
+      const container = document.getElementById('cartItemList');
+      container.innerHTML = '';
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-6 text-gray-400 text-sm">
+            <p>Ihr Warenkorb ist leer.</p>
+            <a href="index.html" class="inline-block mt-2 text-blue-600 font-semibold hover:underline">Jetzt Magnet erstellen</a>
+          </div>
+        `;
+        recalculateTotals();
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        const itemTotal = (item.quantity * PRICE_PER_UNIT).toFixed(2).replace('.', ',') + ' €';
+        const itemEl = document.createElement('div');
+        itemEl.className = "flex items-start justify-between gap-3 p-3 bg-gray-50/70 rounded-xl border border-gray-100 hover:border-gray-200 transition";
+
+        itemEl.innerHTML = `
+          <img src="${item.image || DEFAULT_PREVIEW}" alt="Magnet Preview" class="item-thumbnail flex-shrink-0" onerror="this.src='${DEFAULT_PREVIEW}'">
+          
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-gray-800">${item.size || '63 × 63 mm'}</span>
+              <button type="button" onclick="removeItem(${index})" class="text-gray-400 hover:text-red-500 text-xs px-1" title="Entfernen">&times;</button>
+            </div>
+
+            <p class="text-xs text-gray-500 truncate mt-0.5">
+              ${item.text ? `"${item.text}"` : 'Kein Wunschtext'}
+            </p>
+
+            <div class="flex items-center justify-between mt-2">
+              <div class="flex items-center border border-gray-200 bg-white rounded-lg px-1.5 py-0.5">
+                <button type="button" onclick="updateQty(${index}, -1)" class="text-blue-500 font-bold text-xs px-1.5 hover:bg-gray-100 rounded">-</button>
+                <span class="text-xs font-bold px-2 text-gray-700">${item.quantity}</span>
+                <button type="button" onclick="updateQty(${index}, 1)" class="text-blue-500 font-bold text-xs px-1.5 hover:bg-gray-100 rounded">+</button>
+              </div>
+              <span class="text-sm font-bold text-gray-800">${itemTotal}</span>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(itemEl);
+      });
+
+      recalculateTotals();
+    }
+
+    function updateQty(index, delta) {
+      if (!cart[index]) return;
+      cart[index].quantity += delta;
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+      saveCart();
+      renderCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      saveCart();
+      renderCart();
+      showToast('Artikel entfernt');
+    }
+
+    /**
+     * Rules:
+     * Magnet price: 3.00 € per piece
+     * Germany (DE):
+     *   1 to 30 items: 6,19 €
+     *   > 30 items: Free (0,00 €)
+     * EU:
+     *   1 to 30 items: 6,99 €
+     *   > 30 items: 14,49 €
+     */
+    function recalculateTotals() {
+      const country = document.getElementById('country').value;
+      let totalPieces = 0;
+
+      cart.forEach(item => {
+        totalPieces += parseInt(item.quantity || 1);
+      });
+
+      const subtotal = totalPieces * PRICE_PER_UNIT;
+      let shippingCost = 0;
+      let shippingLabel = "";
+
+      if (totalPieces === 0) {
+        shippingCost = 0;
+        shippingLabel = "Keine Artikel";
+      } else if (country === 'DE') {
+        if (totalPieces <= 30) {
+          shippingCost = 6.19;
+          shippingLabel = "Standard DE (bis 30 Stk.)";
+        } else {
+          shippingCost = 0.00; // Kostenlos
+          shippingLabel = "Kostenloser Versand (>30 Stk.)";
+        }
+      } else { // EU Countries
+        if (totalPieces <= 30) {
+          shippingCost = 6.99;
+          shippingLabel = "Standard EU (bis 30 Stk.)";
+        } else {
+          shippingCost = 14.49;
+          shippingLabel = "Großpaket EU (>30 Stk.)";
+        }
+      }
+
+      const grandTotal = subtotal + shippingCost;
+
+      // Update DOM
+      document.getElementById('totalMagnetCount').textContent = totalPieces;
+      document.getElementById('subtotalPrice').textContent = subtotal.toFixed(2).replace('.', ',') + ' €';
+
+      const shippingEl = document.getElementById('shippingPrice');
+      if (shippingCost === 0 && totalPieces > 0) {
+        shippingEl.textContent = 'Kostenlos';
+        shippingEl.className = 'font-bold text-green-600';
+      } else {
+        shippingEl.textContent = shippingCost.toFixed(2).replace('.', ',') + ' €';
+        shippingEl.className = 'font-medium text-gray-800';
+      }
+
+      document.getElementById('shippingNotice').textContent = shippingLabel;
+      document.getElementById('grandTotalPrice').textContent = grandTotal.toFixed(2).replace('.', ',') + ' €';
+
+      // Disable pay button if cart empty
+      const payBtn = document.getElementById('payButton');
+      if (totalPieces === 0) {
+        payBtn.disabled = true;
+        payBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        payBtn.disabled = false;
+        payBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    // Toast feedback function
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    // Submit handler connecting to node backend
+    async function handleCheckoutSubmit(event) {
+      event.preventDefault();
+
+      if (cart.length === 0) {
+        alert('Ihr Warenkorb ist leer.');
+        return;
+      }
+
+      document.querySelector('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const cart = JSON.parse(localStorage.getItem('snapmagnet_cart')) || [];
+    
+    const shippingDetails = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        street: document.getElementById('street').value,
+        zip: document.getElementById('zip').value,
+        city: document.getElementById('city').value,
+        country: document.getElementById('country').value,
+    };
+
+    // Prikaz poruke učitavanja
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Obrada narudžbe i prijenos slika...";
+
+    try {
+        const response = await fetch('http://localhost:3000/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cart, shippingDetails }),
+        });
+
+        const data = await response.json();
+
+        if (data.url) {
+            // Preusmjeravanje korisnika na Stripe Checkout stranicu
+            window.location.href = data.url;
+        } else {
+            alert('Došlo je do greške prilikom obrade plaćanja.');
+            submitBtn.disabled = false;
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Problem s povezivanjem na poslužitelj.');
+        submitBtn.disabled = false;
+    }
+});
+
+    // Page initialization
+    window.onload = function() {
+      initOrderRef();
+      loadCart();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Personalisierte Fotomagnete</title>
+  <meta name="description" content="Mach besondere Erinnerungen unvergesslich – als handgemachte Fotomagnete.">
+  <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, Cabinet Grotesk, Crimson Pro sans-serif;
+        }
+
+        body {
+            background-color: #f4f8fb;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigacija */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: #1a1a1a;
+        }
+
+        .logo span {
+            color: #4a72ff;
+        }
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #4a72ff;
+        }
+
+        /* Glavni kontejner */
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 90%;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 30px;
+            color: #26272B;
+        }
+
+/* Kontejner obrasca */
+.contact-form {
+  max-width: 500px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Red za Name i Nachname */
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-input {
+  flex: 1;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Zajednički stil za inpute i textarea */
+.form-input {
+  background-color: #ffffff;
+  border: 1.5px solid #dbe3fe;
+  border-radius: 16px;
+  padding: 16px 20px;
+  font-size: 15px;
+  color: #333333;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.form-input::placeholder {
+  color: #6c757d;
+}
+
+/* Efekt kada korisnik klikne u polje */
+.form-input:focus {
+  border-color: #8ab0ff;
+  box-shadow: 0 0 0 3px rgba(138, 176, 255, 0.25);
+}
+
+/* Polje za komentar */
+.form-textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* Gumb Senden */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.submit-btn {
+  background-color: #f4f7ff;
+  color: #1a1a1a;
+  border: 1.5px solid #4a4a4a;
+  border-radius: 12px;
+  padding: 12px 36px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #e2e8ff;
+  border-color: #1a1a1a;
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* Prilagodba za mobitele */
+@media (max-width: 480px) {
+  .form-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+      <header class="site-header">
+    <a class="logo-link" href="index.html" aria-label="SnapMagnet Startseite">
+      <img src="assets/SnapMagnet_Logo.png" alt="SnapMagnet">
+    </a>
+    <nav class="top-nav">
+      <a href="#kontakt">Kontakt</a>
+      <a class="cart" href="#" aria-label="Warenkorb">
+        <span class="cart-icon">♧</span><span class="cart-count">0</span>
+      </a>
+    </nav>
+  </header>
+
+    <main>
+        <h1 style="display:flex;justify-content: center;">Kontakt</h1>
+<!-- Samo zamijeni YOUR_FORM_ID s ID-em koji dobiješ na Formspree -->
+<form class="contact-form" action="https://formspree.io/f/mvkoazwp" method="POST">
+  <div class="form-row">
+    <input type="text" name="Name" placeholder="Name" class="form-input" required>
+    <input type="text" name="Nachname" placeholder="Nachname" class="form-input" required>
+  </div>
+  
+  <input type="tel" name="Telefonnummer" placeholder="Telefonnummer" class="form-input full-width">
+  
+  <textarea name="Komentar" placeholder="Komentar" class="form-input full-width form-textarea" required></textarea>
+  
+  <div class="btn-container">
+    <button type="submit" class="submit-btn">Senden</button>
+  </div>
+</form>
+
+        
+    </main>
+
+    <!-- CAROUSEL / MODAL ZA FULL VIEW -->
+   
+
+<footer id="kontakt" class="site-footer">
+    <img src="assets/SnapMagnetWhite_Logo.png" alt="SnapMagnet">
+    <a class="btn footer-btn" href="Napravi.html">Magnete erstellen</a>
+    <a href="#">Versandkosten</a>
+    <a href="#kontakt">Kontakt</a>
+    <span class="copyright">SnapMagnet © All Rights Reserved 2026</span>
+  </footer>
+
+    <script>
+        const PRICE_PER_UNIT = 3.50;
+        const MAX_IMAGES = 5;
+        let selectedFiles = []; // Pohranjuje base64 prikaz slika
+        let currentImageIndex = 0;
+
+        function updatePrice() {
+            const quantityInput = document.getElementById('quantity');
+            const totalPriceElement = document.getElementById('totalPrice');
+            
+            let quantity = parseInt(quantityInput.value) || 1;
+            let total = quantity * PRICE_PER_UNIT;
+
+            totalPriceElement.textContent = total.toFixed(2).replace('.', ',') + '€';
+        }
+
+        function changeQuantity(change) {
+            const quantityInput = document.getElementById('quantity');
+            let currentVal = parseInt(quantityInput.value) || 1;
+            
+            let newVal = currentVal + change;
+            if (newVal >= 1) {
+                quantityInput.value = newVal;
+                updatePrice();
+            }
+        }
+
+        // Prijenos slika i provjera limita od 5 slika
+        function handleImageUpload(event) {
+            const files = Array.from(event.target.files);
+            
+            if (selectedFiles.length + files.length > MAX_IMAGES) {
+                alert(`Možete odabrati maksimalno ${MAX_IMAGES} slika.`);
+            }
+
+            const allowedFiles = files.slice(0, MAX_IMAGES - selectedFiles.length);
+
+            let loadedCount = 0;
+            allowedFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedFiles.push(e.target.result);
+                    loadedCount++;
+                    if (loadedCount === allowedFiles.length) {
+                        renderPreviews();
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+
+            event.target.value = ''; // Resetiraj input
+        }
+
+        // Prikaz slicica i ažuriranje gumba/teksta za limit
+        function renderPreviews() {
+            const container = document.getElementById('previewContainer');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const imageInput = document.getElementById('imageInput');
+            const limitInfo = document.getElementById('limitInfo');
+
+            container.innerHTML = ''; 
+
+            selectedFiles.forEach((src, index) => {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+
+                previewItem.innerHTML = `
+                    <img src="${src}" alt="Preview" onclick="openModal(${index})">
+                    <button class="remove-btn" onclick="removeImage(event, ${index})">&times;</button>
+                `;
+
+                container.appendChild(previewItem);
+            });
+
+            // Ažuriranje statusa limita
+            limitInfo.textContent = `Možete učitati maksimalno 5 slika (${selectedFiles.length}/${MAX_IMAGES}).`;
+            
+            if (selectedFiles.length >= MAX_IMAGES) {
+                uploadBtn.disabled = true;
+                imageInput.disabled = true;
+            } else {
+                uploadBtn.disabled = false;
+                imageInput.disabled = false;
+            }
+        }
+
+        function removeImage(event, index) {
+            event.stopPropagation(); // Spriječava otvaranje modala kad se klikne na 'X'
+            selectedFiles.splice(index, 1);
+            renderPreviews();
+        }
+
+        // --- CAROUSEL / FULL VIEW MODAL FUNKCIONALNOST ---
+        function openModal(index) {
+            currentImageIndex = index;
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'flex';
+            updateModalImage();
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function navigateCarousel(direction) {
+            currentImageIndex += direction;
+            if (currentImageIndex < 0) {
+                currentImageIndex = selectedFiles.length - 1; // Idi na zadnju
+            } else if (currentImageIndex >= selectedFiles.length) {
+                currentImageIndex = 0; // Vrati na prvu
+            }
+            updateModalImage();
+        }
+
+        function updateModalImage() {
+            const modalImg = document.getElementById('modalImage');
+            const counter = document.getElementById('modalCounter');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            modalImg.src = selectedFiles[currentImageIndex];
+            counter.textContent = `${currentImageIndex + 1} / ${selectedFiles.length}`;
+
+            // Ako je samo jedna slika, sakrij strjelice carousela
+            if (selectedFiles.length <= 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+            }
+        }
+
+        // Navigacija tipkovnicom (Lijevo, Desno, ESC)
+        document.addEventListener('keydown', function(e) {
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display === 'flex') {
+                if (e.key === 'ArrowLeft') navigateCarousel(-1);
+                if (e.key === 'ArrowRight') navigateCarousel(1);
+                if (e.key === 'Escape') closeModal();
+            }
+        });
+
+        // Inicijalni izračun pri učitavanju
+        updatePrice();
+    </script>
+
+</body>
+</html>
